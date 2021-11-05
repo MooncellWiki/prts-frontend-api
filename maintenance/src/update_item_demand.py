@@ -90,7 +90,7 @@ async def get_item_demand():
                                     ] += demand["count"]
                                     i += 1
 
-    with open("../../data/item_demand,json", "w") as f:
+    with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
 
 
