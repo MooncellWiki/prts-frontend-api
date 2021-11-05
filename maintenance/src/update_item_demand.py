@@ -9,12 +9,12 @@ def trans_rarity(rarity):
 
 
 async def fetch_char_data():
-    with open("gamedata/excel/character_table.json") as f:
+    with open(f"{GAMEDATA_BASE_DIR}/excel/character_table.json") as f:
         return json.load(f)
 
 
 async def fetch_item_data():
-    with open("gamedata/excel/item_table.json") as f:
+    with open(f"{GAMEDATA_BASE_DIR}/excel/item_table.json") as f:
         return json.load(f)
 
 
