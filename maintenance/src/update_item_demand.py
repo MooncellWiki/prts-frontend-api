@@ -4,6 +4,7 @@ import json
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from config import *
 
+
 def trans_rarity(rarity):
     return {0: "一星", 1: "二星", 2: "三星", 3: "四星", 4: "五星", 5: "六星"}[rarity]
 
@@ -80,11 +81,11 @@ async def get_item_demand():
                                     ] += demand["count"]
                                     i += 1
 
-    for item_name, demand in item_demand.items():
-        print(item_name, item_demand)
+    with open("../../data/item_demand,json", "w") as f:
+        json.dump(item_demand, f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     scheduler = AsyncIOScheduler()
     job = scheduler.add_job(get_item_demand, "interval", seconds=5)
     scheduler.start()
