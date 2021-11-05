@@ -1,0 +1,1 @@
+GAMEDATA_BASE_DIR="/home"
