@@ -73,11 +73,11 @@ async def get_item_demand():
                         )
                         item_demand[item_name][char_id]["skill"] += demand["count"]
 
+            i = 0
             for skill in char_detail["skills"]:
                 if skill["levelUpCostCond"]:
                     for cost_cond in skill["levelUpCostCond"]:
                         if cost_cond["levelUpCost"]:
-                            i = 0
                             for demand in cost_cond["levelUpCost"]:
                                 item_name = item_table["items"][demand["id"]][
                                     "name"
@@ -88,7 +88,7 @@ async def get_item_demand():
                                 item_demand[item_name][char_id]["mastery"][
                                     i
                                 ] += demand["count"]
-                            i += 1
+                i += 1
 
     with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
