@@ -23,6 +23,10 @@ func main() {
 		AllowMethods: []string{
 			http.MethodGet,
 			http.MethodHead,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodPost,
+			http.MethodDelete,
 			http.MethodOptions,
 		},
 		AllowCredentials: true,
