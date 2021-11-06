@@ -88,7 +88,7 @@ async def get_item_demand():
                                     item_demand[item_name][char_id]["mastery"][
                                         i
                                     ] += demand["count"]
-                                    i += 1
+                                i += 1
 
     with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
