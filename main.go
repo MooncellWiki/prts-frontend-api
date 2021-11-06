@@ -33,7 +33,7 @@ func main() {
 		ExposeHeaders: []string{
 			"Last-Modified",
 		},
-		MaxAge: int((time.Hour * 24 * 365).Seconds()),
+		MaxAge: int((time.Hour).Seconds()),
 	}))
 
 	e.Logger.Debug("`echo` has been initialized")
@@ -45,5 +45,5 @@ func main() {
 
 	e.Logger.Debug("controllers registered. starting http server...")
 	// Start server
-	e.Logger.Fatal(e.Start("127.0.0.1:1323"))
+	e.Logger.Fatal(e.Start("0.0.0.0:3001"))
 }
