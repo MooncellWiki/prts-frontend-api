@@ -33,7 +33,7 @@ func main() {
 		ExposeHeaders: []string{
 			"Last-Modified",
 		},
-		MaxAge: int((time.Minute * 15).Seconds()),
+		MaxAge: int((time.Hour * 24 * 365).Seconds()),
 	}))
 
 	e.Logger.Debug("`echo` has been initialized")
