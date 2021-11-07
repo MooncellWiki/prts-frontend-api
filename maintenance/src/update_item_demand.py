@@ -70,7 +70,11 @@ async def get_item_demand():
                     for demand in skill_level_up["lvlUpCost"]:
                         item_name = item_table["items"][demand["id"]]["name"]
                         await ensure_item_exists(
-                            item_demand, item_name, char_id, char_detail
+                            item_demand,
+                            item_name,
+                            char_id,
+                            char_detail,
+                            len(char_detail["skills"]),
                         )
                         item_demand[item_name][char_id]["skill"] += demand["count"]
 
