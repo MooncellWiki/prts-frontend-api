@@ -43,7 +43,7 @@ async def fetch_item_data():
         return json.load(f)
 
 
-async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill_num=3):
+async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill_num):
     if not item_demand.get(item_name):
         item_demand[item_name] = {}
     if not item_demand[item_name].get(char_id):
@@ -77,7 +77,11 @@ async def get_item_demand():
                 for evolve_cost_item in phase["evolveCost"]:
                     item_name = item_table["items"][evolve_cost_item["id"]]["name"]
                     await ensure_item_exists(
-                        item_demand, item_name, char_id, char_detail
+                        item_demand,
+                        item_name,
+                        char_id,
+                        char_detail,
+                        len(char_detail.get("skills", [{},{},{}])),
                     )
                     item_demand[item_name][char_id]["elite"] += evolve_cost_item[
                         "count"
