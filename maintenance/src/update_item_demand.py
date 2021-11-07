@@ -62,7 +62,7 @@ async def get_item_demand():
     item_table = await fetch_item_data()
     char_patch_table = await fetch_char_patch_data()
 
-    for patch_char_id, patch_char_detail in char_patch_table["patchChars"]:
+    for patch_char_id, patch_char_detail in char_patch_table["patchChars"].items():
         patch_char_detail["name"] += f"({trans_prof(patch_char_detail['profession'])})"
         character_table[patch_char_id] = patch_char_detail
 
