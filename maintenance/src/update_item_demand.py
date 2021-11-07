@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from os import remove
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -28,7 +29,7 @@ async def fetch_item_data():
         return json.load(f)
 
 
-async def ensure_item_exists(item_demand, item_name, char_id, char_detail):
+async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill_num=3):
     if not item_demand.get(item_name):
         item_demand[item_name] = {}
     if not item_demand[item_name].get(char_id):
@@ -38,7 +39,7 @@ async def ensure_item_exists(item_demand, item_name, char_id, char_detail):
             "profession": char_detail["profession"],
             "elite": 0,
             "skill": 0,
-            "mastery": [0, 0, 0],
+            "mastery": [0 for i in range(0, skill_num)],
         }
 
 
@@ -75,19 +76,21 @@ async def get_item_demand():
 
             i = 0
             for skill in char_detail["skills"]:
-                if skill["levelUpCostCond"]:
-                    for cost_cond in skill["levelUpCostCond"]:
-                        if cost_cond["levelUpCost"]:
-                            for demand in cost_cond["levelUpCost"]:
-                                item_name = item_table["items"][demand["id"]][
-                                    "name"
-                                ]
-                                await ensure_item_exists(
-                                    item_demand, item_name, char_id, char_detail
-                                )
-                                item_demand[item_name][char_id]["mastery"][
-                                    i
-                                ] += demand["count"]
+                if not skill["levelUpCostCond"]:
+                    continue
+                for cost_cond in skill["levelUpCostCond"]:
+                    if not cost_cond["levelUpCost"]:
+                        continue
+                    for demand in cost_cond["levelUpCost"]:
+                        item_name = item_table["items"][demand["id"]]["name"]
+                        await ensure_item_exists(
+                            item_demand,
+                            item_name,
+                            char_id,
+                            char_detail,
+                            len(char_detail["skills"]),
+                        )
+                        item_demand[item_name][char_id]["mastery"][i] += demand["count"]
                 i += 1
 
     with open("../../data/item_demand.json", "w") as f:
