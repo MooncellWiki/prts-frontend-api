@@ -15,8 +15,26 @@ aps_logger.addHandler(LoguruHandler())
 from config import *
 
 
+def trans_prof(profession):
+    return {
+        "PIONEER": "先锋",
+        "WARRIOR": "近卫",
+        "SNIPER": "狙击",
+        "SUPPORT": "辅助",
+        "CASTER": "术师",
+        "SPECIAL": "特种",
+        "MEDIC": "医疗",
+        "TANK": "重装",
+    }[profession]
+
+
 async def fetch_char_data():
     with open(f"{GAMEDATA_BASE_DIR}/excel/character_table.json") as f:
+        return json.load(f)
+
+
+async def fetch_char_patch_data():
+    with open(f"{GAMEDATA_BASE_DIR}/excel/char_patch_table.json") as f:
         return json.load(f)
 
 
@@ -42,6 +60,11 @@ async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill
 async def get_item_demand():
     character_table = await fetch_char_data()
     item_table = await fetch_item_data()
+    char_patch_table = await fetch_char_patch_data()
+
+    for patch_char_id, patch_char_detail in char_patch_table["patchChars"]:
+        patch_char_detail["name"] += f"({trans_prof(patch_char_detail['profession'])})"
+        character_table[patch_char_id] = patch_char_detail
 
     item_demand = {}
     for char_id, char_detail in character_table.items():
