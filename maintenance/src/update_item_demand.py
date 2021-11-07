@@ -83,6 +83,9 @@ async def get_item_demand():
                         char_detail,
                         len(char_detail.get("skills", [{},{},{}])),
                     )
+                    if char_id == "char_1001_amiya2":
+                        item_demand[item_name][char_id]["elite"] = 0
+                        continue
                     item_demand[item_name][char_id]["elite"] += evolve_cost_item[
                         "count"
                     ]
