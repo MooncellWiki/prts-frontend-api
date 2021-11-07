@@ -15,10 +15,6 @@ aps_logger.addHandler(LoguruHandler())
 from config import *
 
 
-def trans_rarity(rarity):
-    return {0: "一星", 1: "二星", 2: "三星", 3: "四星", 4: "五星", 5: "六星"}[rarity]
-
-
 async def fetch_char_data():
     with open(f"{GAMEDATA_BASE_DIR}/excel/character_table.json") as f:
         return json.load(f)
