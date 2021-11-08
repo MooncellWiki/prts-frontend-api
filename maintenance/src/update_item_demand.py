@@ -126,10 +126,19 @@ async def get_item_demand():
                     item_demand[item_name][char_id]["mastery"][i] += demand["count"]
             i += 1
 
+    delete_demand = []
     for item_name, demand_detail in item_demand.items():
-        for char_id,char_demand in demand_detail.items():
-            if char_demand["elite"] == 0 and char_demand["skill"] == 0 and set(char_demand["mastery"]) == set([0]):
-                del item_demand[item_name][char_id]
+        for char_id, char_demand in demand_detail.items():
+            if (
+                char_demand["elite"] == 0
+                and char_demand["skill"] == 0
+                and set(char_demand["mastery"]) == set([0])
+            ):
+                delete_demand.append((item_name, char_id))
+
+    for delete_target in delete_demand:
+        item_name, char_id = delete_target
+        del item_demand[item_name][char_id]
 
     with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
