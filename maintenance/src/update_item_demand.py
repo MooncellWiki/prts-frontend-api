@@ -90,38 +90,46 @@ async def get_item_demand():
                         "count"
                     ]
 
-        if char_detail["skills"]:
-            for skill_level_up in char_detail["allSkillLvlup"]:
-                if skill_level_up["lvlUpCost"]:
-                    for demand in skill_level_up["lvlUpCost"]:
-                        item_name = item_table["items"][demand["id"]]["name"]
-                        await ensure_item_exists(
-                            item_demand,
-                            item_name,
-                            char_id,
-                            char_detail,
-                            len(char_detail["skills"]),
-                        )
-                        item_demand[item_name][char_id]["skill"] += demand["count"]
+        if not char_detail["skills"]:
+            continue
 
-            i = 0
-            for skill in char_detail["skills"]:
-                if not skill["levelUpCostCond"]:
+        for skill_level_up in char_detail["allSkillLvlup"]:
+            if not skill_level_up["lvlUpCost"]:
+                continue
+            for demand in skill_level_up["lvlUpCost"]:
+                item_name = item_table["items"][demand["id"]]["name"]
+                await ensure_item_exists(
+                    item_demand,
+                    item_name,
+                    char_id,
+                    char_detail,
+                    len(char_detail["skills"]),
+                )
+                item_demand[item_name][char_id]["skill"] += demand["count"]
+
+        i = 0
+        for skill in char_detail["skills"]:
+            if not skill["levelUpCostCond"]:
+                continue
+            for cost_cond in skill["levelUpCostCond"]:
+                if not cost_cond["levelUpCost"]:
                     continue
-                for cost_cond in skill["levelUpCostCond"]:
-                    if not cost_cond["levelUpCost"]:
-                        continue
-                    for demand in cost_cond["levelUpCost"]:
-                        item_name = item_table["items"][demand["id"]]["name"]
-                        await ensure_item_exists(
-                            item_demand,
-                            item_name,
-                            char_id,
-                            char_detail,
-                            len(char_detail["skills"]),
-                        )
-                        item_demand[item_name][char_id]["mastery"][i] += demand["count"]
-                i += 1
+                for demand in cost_cond["levelUpCost"]:
+                    item_name = item_table["items"][demand["id"]]["name"]
+                    await ensure_item_exists(
+                        item_demand,
+                        item_name,
+                        char_id,
+                        char_detail,
+                        len(char_detail["skills"]),
+                    )
+                    item_demand[item_name][char_id]["mastery"][i] += demand["count"]
+            i += 1
+
+    for item_name, demand_detail in item_demand.items():
+        for char_id,char_demand in demand_detail.items():
+            if char_demand["elite"] == 0 and char_demand["skill"] == 0 and set(char_demand["mastery"]) == set([0]):
+                del item_demand[item_name][char_id]
 
     with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
