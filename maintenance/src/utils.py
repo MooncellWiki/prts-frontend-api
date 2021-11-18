@@ -1,6 +1,6 @@
 import json
 
-from .config import GAMEDATA_BASE_DIR
+from src.config import GAMEDATA_BASE_DIR
 
 
 def trans_prof(profession):

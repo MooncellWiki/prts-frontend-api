@@ -10,7 +10,7 @@ aps_logger.addHandler(LoguruHandler())
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from .tasks.update_item_demand import get_item_demand
+from src.tasks.update_item_demand import get_item_demand
 
 
 if __name__ == "__main__":
