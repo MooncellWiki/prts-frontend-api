@@ -21,7 +21,7 @@ async def get_item_demand():
     character_table = fetch_data("excel/character_table.json")
     item_table = fetch_data("excel/item_table.json")
     char_patch_table = fetch_data("excel/char_patch_table.json")
-    uniequip_table = fetch_data("uniequip_table")
+    uniequip_table = fetch_data("excel/uniequip_table.json")
 
     for patch_char_id, patch_char_detail in char_patch_table["patchChars"].items():
         patch_char_detail["name"] += f"({trans_prof(patch_char_detail['profession'])})"
