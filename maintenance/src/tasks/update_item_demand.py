@@ -120,5 +120,5 @@ async def get_item_demand():
         item_name, char_id = delete_target
         del item_demand[item_name][char_id]
 
-    with open("../../data/item_demand.json", "w") as f:
+    with open("../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
