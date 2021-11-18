@@ -13,6 +13,7 @@ async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill
             "profession": char_detail["profession"],
             "elite": 0,
             "skill": 0,
+            "uniequip": 0,
             "mastery": [0 for i in range(0, skill_num)],
         }
 
@@ -95,6 +96,13 @@ async def get_item_demand():
             char_id = uniequip_detail["charId"]
             if demand["type"] != "MATERIAL":
                 continue
+            await ensure_item_exists(
+                item_demand,
+                item_name,
+                char_id,
+                character_table[char_id],
+                len(character_table[char_id].get("skills", [])),
+            )
             item_demand[item_name][char_id]["uniequip"] += demand["count"]
 
     delete_demand = []
@@ -104,6 +112,7 @@ async def get_item_demand():
                 char_demand["elite"] == 0
                 and char_demand["skill"] == 0
                 and set(char_demand["mastery"]) == set([0])
+                and char_demand["uniequip"] == 0
             ):
                 delete_demand.append((item_name, char_id))
 
