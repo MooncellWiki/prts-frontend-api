@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from log import LoguruHandler
+from src.log import LoguruHandler
 
 aps_logger = logging.getLogger("apscheduler")
 aps_logger.setLevel(logging.DEBUG)
