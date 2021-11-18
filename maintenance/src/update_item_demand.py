@@ -1,46 +1,6 @@
-import asyncio
 import json
-import logging
-from os import remove
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-from log import LoguruHandler, logger
-
-aps_logger = logging.getLogger("apscheduler")
-aps_logger.setLevel(logging.DEBUG)
-aps_logger.handlers.clear()
-aps_logger.addHandler(LoguruHandler())
-
-from config import *
-
-
-def trans_prof(profession):
-    return {
-        "PIONEER": "先锋",
-        "WARRIOR": "近卫",
-        "SNIPER": "狙击",
-        "SUPPORT": "辅助",
-        "CASTER": "术师",
-        "SPECIAL": "特种",
-        "MEDIC": "医疗",
-        "TANK": "重装",
-    }[profession]
-
-
-async def fetch_char_data():
-    with open(f"{GAMEDATA_BASE_DIR}/excel/character_table.json") as f:
-        return json.load(f)
-
-
-async def fetch_char_patch_data():
-    with open(f"{GAMEDATA_BASE_DIR}/excel/char_patch_table.json") as f:
-        return json.load(f)
-
-
-async def fetch_item_data():
-    with open(f"{GAMEDATA_BASE_DIR}/excel/item_table.json") as f:
-        return json.load(f)
+from .utils import fetch_data, trans_prof
 
 
 async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill_num):
@@ -58,9 +18,9 @@ async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill
 
 
 async def get_item_demand():
-    character_table = await fetch_char_data()
-    item_table = await fetch_item_data()
-    char_patch_table = await fetch_char_patch_data()
+    character_table = fetch_data("excel/character_table.json")
+    item_table = fetch_data("excel/item_table.json")
+    char_patch_table = fetch_data("excel/char_patch_table.json")
 
     for patch_char_id, patch_char_detail in char_patch_table["patchChars"].items():
         patch_char_detail["name"] += f"({trans_prof(patch_char_detail['profession'])})"
@@ -142,14 +102,3 @@ async def get_item_demand():
 
     with open("../../data/item_demand.json", "w") as f:
         json.dump(item_demand, f)
-
-
-if __name__ == "__main__":
-    scheduler = AsyncIOScheduler()
-    job = scheduler.add_job(get_item_demand, "interval", minutes=5)
-    scheduler.start()
-
-    try:
-        asyncio.get_event_loop().run_forever()
-    except (KeyboardInterrupt, SystemExit):
-        pass
