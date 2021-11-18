@@ -12,13 +12,13 @@ import (
 func ItemDemand(c echo.Context) error {
 	bytes, err := ioutil.ReadFile("data/item_demand.json")
 	if err != nil {
-		fmt.Println("读取json文件失败", err)
+		fmt.Println("An error occurred in file i/o procedure", err)
 		return err
 	}
 	var m map[string]interface{}
 	err = json.Unmarshal(bytes, &m)
 	if err != nil {
-		fmt.Println("解析数据失败", err)
+		fmt.Println("Failed to unmarshal json data", err)
 		return err
 	}
 
