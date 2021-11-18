@@ -1,6 +1,6 @@
 import json
 
-from .utils import fetch_data, trans_prof
+from src.utils import fetch_data, trans_prof
 
 
 async def ensure_item_exists(item_demand, item_name, char_id, char_detail, skill_num):
