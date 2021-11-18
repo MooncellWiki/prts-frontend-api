@@ -21,6 +21,7 @@ async def get_item_demand():
     character_table = fetch_data("excel/character_table.json")
     item_table = fetch_data("excel/item_table.json")
     char_patch_table = fetch_data("excel/char_patch_table.json")
+    uniequip_table = fetch_data("uniequip_table")
 
     for patch_char_id, patch_char_detail in char_patch_table["patchChars"].items():
         patch_char_detail["name"] += f"({trans_prof(patch_char_detail['profession'])})"
@@ -85,6 +86,16 @@ async def get_item_demand():
                     )
                     item_demand[item_name][char_id]["mastery"][i] += demand["count"]
             i += 1
+
+    for uniequip_id, uniequip_detail in uniequip_table["equipDict"].items():
+        if not uniequip_detail["itemCost"]:
+            continue
+        for demand in uniequip_detail["itemCost"]:
+            item_name = item_table["items"][demand["id"]]["name"]
+            char_id = uniequip_detail["charId"]
+            if demand["type"] != "MATERIAL":
+                continue
+            item_demand[item_name][char_id]["uniequip"] += demand["count"]
 
     delete_demand = []
     for item_name, demand_detail in item_demand.items():
