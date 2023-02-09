@@ -123,7 +123,7 @@ async def get_item_demand():
         del item_demand[item_name][char_id]
 
     with open("../data/item_demand.json", "w", encoding="utf-8") as f:
-        json.dump(item_demand, f, ensure_ascii=False, indent=2)
+        json.dump(item_demand, f, ensure_ascii=False)
 
 if __name__ == "__main__":
     import asyncio
