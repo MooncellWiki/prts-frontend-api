@@ -16,5 +16,5 @@ def trans_prof(profession):
     }[profession]
 
 def fetch_data(path):
-    with open(f"{GAMEDATA_BASE_DIR}/{path}") as f:
+    with open(f"{GAMEDATA_BASE_DIR}/{path}", encoding="utf-8") as f:
         return json.load(f)

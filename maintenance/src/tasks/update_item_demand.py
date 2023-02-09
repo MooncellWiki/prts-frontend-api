@@ -1,3 +1,4 @@
+import itertools
 import json
 
 from src.utils import fetch_data, trans_prof
@@ -91,7 +92,7 @@ async def get_item_demand():
     for uniequip_id, uniequip_detail in uniequip_table["equipDict"].items():
         if not uniequip_detail["itemCost"]:
             continue
-        item_costs = list(uniequip_detail["itemCost"].values())[0]
+        item_costs = list(itertools.chain.from_iterable(uniequip_detail["itemCost"].values()))
         for demand in item_costs:
             item_name = item_table["items"][demand["id"]]["name"]
             char_id = uniequip_detail["charId"]
@@ -121,5 +122,10 @@ async def get_item_demand():
         item_name, char_id = delete_target
         del item_demand[item_name][char_id]
 
-    with open("../data/item_demand.json", "w") as f:
-        json.dump(item_demand, f)
+    with open("../data/item_demand.json", "w", encoding="utf-8") as f:
+        json.dump(item_demand, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(get_item_demand())
