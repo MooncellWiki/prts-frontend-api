@@ -91,7 +91,8 @@ async def get_item_demand():
     for uniequip_id, uniequip_detail in uniequip_table["equipDict"].items():
         if not uniequip_detail["itemCost"]:
             continue
-        for demand in uniequip_detail["itemCost"]:
+        item_costs = list(uniequip_detail["itemCost"].values())[0]
+        for demand in item_costs:
             item_name = item_table["items"][demand["id"]]["name"]
             char_id = uniequip_detail["charId"]
             if demand["type"] != "MATERIAL":

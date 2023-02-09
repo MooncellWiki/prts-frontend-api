@@ -1,1 +1,1 @@
-GAMEDATA_BASE_DIR="/home"
+GAMEDATA_BASE_DIR="/home/ubuntu/ark-data/gamedata"
